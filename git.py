@@ -183,3 +183,13 @@ def diff():
             print(line)
         if i < len(changed) - 1:
             print('-' * 70)
+            
+def write_index(entries):
+    packed_entries = []
+    for entry in entries:
+        entry_head = struct.pack('!LLLLLLLLLL20sH',
+                entry.ctime_s, entry.ctime_n, entry.mtime_s, entry.mtime_n,
+                entry.dev, entry.ino, entry.mode, entry.uid, entry.gid,
+                entry.size, entry.sha1, entry.flags)
+        path = entry.path.encode()
+        length = ((62 + len(path) + 8) // 8) * 8
